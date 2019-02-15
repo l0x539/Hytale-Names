@@ -1,0 +1,56 @@
+<main class="container">
+  {% with messages = get_flashed_messages() %}
+  {%for message in messages%}
+  <div class="alert alert-danger text-center">{{message}}</div>
+  {% endfor %}
+  {% endwith %}
+  <div class="row">
+    <div class="col-xl-8">
+      <h2 class="text-center"><a href="#">{{Name}}</a></h2>
+        <div class="card table-responsive">
+          <table class="table table-sm mb-0">
+            <tbody>
+            <tr>
+              <td class="text-muted text-left" width="1"><i class="far fa-user menu-icon"></i>Name</td>
+              <td class="text-muted text-center" width="1"><i class="far fa-search menu-icon"></i>Searches</td>
+              <td class="text-muted text-right" width="1"><i class="far fa-star menu-icon"></i>Favorites</td>
+            </tr>
+            {% if best_names|length >= 10 %} {% set i=10 %} {% else %} {% set i=best_names|length %} {% endif %}
+            {% for best_name_index in range(i) %}
+            <tr>
+              <td class="text-muted text-left" width="1">#{{best_names[best_name_index][2]}}</td>
+              <td class="text-muted text-center" width="1">#{{best_names[best_name_index][4]}}</td>
+              <td class="text-muted text-right" width="1"><a href="#" onclick="like_unlike({{best_names[best_name_index][0]}})">{% set liked_id="liked"+best_names[best_name_index][0]|string %}{% if session[liked_id] %}✓{% else %}★{% endif %}{{best_names[best_name_index][5]}}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% if best_names|length > 10 %}
+      <div class="text-right mt-2 mb-3">
+        <a class="btn btn-primary btn-sm" href="#">Continue<i class="far fa-arrow-right ml-1"></i></a>
+      </div>
+       {% endif %}
+    </div>
+    <div class="col-xl-4">
+      <h2 class="d-none d-lg-block">&nbsp;</h2>
+      <div class="card mb-3">
+        <a class="twitter-timeline" href="https://twitter.com/Hytale_Names?ref_src=twsrc%5Etfw">Tweets by Hytale_Names</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  function like_unlike(id) {
+        $.ajax({
+            url: "/names/like/",
+            type: "POST",
+            data: {id: id},
+            success: function(data){
+                data = JSON.parse(data);
+                //update some fields with the updated data
+                //you can access the data like 'data["driver"]'
+            }
+        });
+   }
+</script>

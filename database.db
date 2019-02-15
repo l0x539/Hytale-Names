@@ -1,0 +1,31 @@
+CREATE DATABASE hytale_names;
+
+USE hytale_names;
+
+CREATE TABLE names (
+    id int NOT NULL AUTO_INCREMENT,
+    uuid VARCHAR(50),
+    name VARCHAR(200),
+    time_created DATETIME,
+    searches int DEFAULT 0,
+    favorit int DEFAULT 0,
+    on_name VARCHAR(1) DEFAULT "0",
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE likes (
+    id int NOT NULL AUTO_INCREMENT,
+    name_id int,
+    user_ip VARCHAR(30),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE users (
+    id int NOT NULL AUTO_INCREMENT,
+    username VARCHAR(100),
+    email VARCHAR(50),
+    pass_hash VARCHAR(100),
+    registred VARCHAR(1),
+    recover_hash VARCHAR(200),
+    PRIMARY KEY (id)
+);

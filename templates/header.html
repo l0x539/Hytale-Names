@@ -1,0 +1,191 @@
+<header>
+  <div style="background: url('/static/bg19.jpg') no-repeat center center; background-size: cover;">
+    <div style="background: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0))">
+      <nav class="navbar navbar-expand navbar-dark px-0 py-2">
+        <div class="container px-3">
+          <a class="navbar-brand d-none d-lg-block" href="/" title="Hytale Names &amp; Skins"><img style="outline: 1px solid white" class="align-top" src="/static/favicon-32x32.png" width="30" height="30" alt="Hytale Names"><span class="ml-2" translate="no">Hytale Names</span></a>
+          <ul class="navbar-nav mr-auto d-none d-lg-flex">
+            <li class="nav-item"><a class="nav-link" href="/hytale-names" alt="Minecraft Names"><i class="far fa-align-justify menu-icon"></i>Names</a></li>
+            <li class="nav-item"><a class="nav-link" href="/#faq" title="Frequently Asked Questions"><i class="fas fa-question-circle menu-icon"></i>FAQ</a></li>
+            <li class="nav-item"><a class="nav-link" href="/discord"><i class="fab fa-discord menu-icon"></i>Discord</a></li>
+          </ul>
+          <ul class="navbar-nav mr-auto d-flex d-lg-none">
+            <li class="nav-item dropdown">
+              <a class="nav-link navbar-brand dropdown-toggle text-white pl-0 mr-0" href="#" title="Hytale Names &amp; Skins" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img style="outline: 1px solid white" class="align-top" src="/static/favicon-32x32.png" width="30" height="30" alt="HNames" title="HNames"><span class="d-none d-sm-inline ml-2" translate="no">HNames</span></a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item active" href="/"><i class="fas fa-home menu-icon"></i>Home</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/hytale-names" alt="Hytale Names"><i class="far fa-align-justify menu-icon"></i>Names</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/#faq" title="Frequently Asked Questions"><i class="fas fa-question-circle menu-icon"></i>FAQ</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/discord"><i class="fab fa-discord menu-icon"></i>Discord</a>
+              </div>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                {% if logged_in %}
+              <a class="nav-link dropdown-toggle text-nowrap pl-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span translate="no">{{user_email}}</span></a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <h6 class="dropdown-header">Profile</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/claim-your-profile"><i class="far fa-link menu-icon"></i>Claim Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout"><i class="far fa-sign-out menu-icon"></i>Log Out</a>
+              </div>
+                {% else %}
+                <a class="nav-link pl-0" href="/login"><i class="far fa-sign-in menu-icon"></i>Log In</a>
+                {% endif %}
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="emoji" draggable="false" alt="🇺🇸" src="/static/imgs/svg/1f1fa-1f1f8.svg"></a>
+              <div class="dropdown-menu dropdown-menu-right" style="min-width:400px;">
+                <div class="dropdown-divider"></div>
+                <div class="row no-gutters">
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('id')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇮🇩" src="/static/imgs/svg/1f1ee-1f1e9.svg"></span>Bahasa Indonesia</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ms')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇲🇾" src="/static/imgs/svg/1f1f2-1f1fe.svg"></span>Bahasa Malaysia</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ca')"><span class="mr-1"><img class="emoji" draggable="false" alt="🏴" src="/static/imgs/svg/1f3f4-e0065-e0073-e0063-e0074-e007f.svg">󠁥󠁳󠁣󠁴󠁿󠁧󠁢󠁳󠁣󠁴󠁿</span>català</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('cs')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇨🇿" src="/static/imgs/svg/1f1e8-1f1ff.svg"></span>čeština</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('da')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇩🇰" src="/static/imgs/svg/1f1e9-1f1f0.svg"></span>Dansk</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('de')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇩🇪" src="/static/imgs/svg/1f1e9-1f1ea.svg"></span>Deutsch</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('et')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇪🇪" src="/static/imgs/svg/1f1ea-1f1ea.svg"></span>Eesti</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('en')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇺🇸" src="/static/imgs/svg/1f1fa-1f1f8.svg"></span>English<i class="far fa-check menu-icon"></i></a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('es')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇪🇸" src="/static/imgs/svg/1f1ea-1f1f8.svg"></span>español</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('es-cl')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇨🇱" src="/static/imgs/svg/1f1e8-1f1f1.svg"></span>español (chileno)</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('fr')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇫🇷" src="/static/imgs/svg/1f1eb-1f1f7.svg"></span>français</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('fr-ca')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇨🇦" src="/static/imgs/svg/1f1e8-1f1e6.svg"></span>français (canadien)</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('hr')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇭🇷" src="/static/imgs/svg/1f1ed-1f1f7.svg"></span>hrvatski</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('it')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇮🇹" src="/static/imgs/svg/1f1ee-1f1f9.svg"></span>italiano</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('lv')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇱🇻" src="/static/imgs/svg/1f1f1-1f1fb.svg"></span>Latviešu</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('lt')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇱🇹" src="/static/imgs/svg/1f1f1-1f1f9.svg"></span>Lietuvių</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('hu')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇭🇺" src="/static/imgs/svg/1f1ed-1f1fa.svg"></span>Magyar</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('nl')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇳🇱" src="/static/imgs/svg/1f1f3-1f1f1.svg"></span>Nederlands</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('no')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇳🇴" src="/static/imgs/svg/1f1f3-1f1f4.svg"></span>norsk</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('pl')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇵🇱" src="/static/imgs/svg/1f1f5-1f1f1.svg"></span>polski</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('pt')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇧🇷" src="/static/imgs/svg/1f1e7-1f1f7.svg"></span>português</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ro')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇷🇴" src="/static/imgs/svg/1f1f7-1f1f4.svg"></span>română</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('sk')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇸🇰" src="/static/imgs/svg/1f1f8-1f1f0.svg"></span>slovenčina</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('sl')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇸🇮" src="/static/imgs/svg/1f1f8-1f1ee.svg"></span>slovenščina</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('fi')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇫🇮" src="/static/imgs/svg/1f1eb-1f1ee.svg"></span>suomi</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('sv')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇸🇪" src="/static/imgs/svg/1f1f8-1f1ea.svg"></span>svenska</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('vi')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇻🇳" src="/static/imgs/svg/1f1fb-1f1f3.svg"></span>tiếng việt</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('tr')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇹🇷" src="/static/imgs/svg/1f1f9-1f1f7.svg"></span>Türkçe</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('el')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇬🇷" src="/static/imgs/svg/1f1ec-1f1f7.svg"></span>Ελληνικά</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('bg')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇧🇬" src="/static/imgs/svg/1f1e7-1f1ec.svg"></span>български</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ru')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇷🇺" src="/static/imgs/svg/1f1f7-1f1fa.svg"></span>русский</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('sr')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇷🇸" src="/static/imgs/svg/1f1f7-1f1f8.svg"></span>Српски</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('uk')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇺🇦" src="/static/imgs/svg/1f1fa-1f1e6.svg"></span>українська</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ar')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇸🇦" src="/static/imgs/svg/1f1f8-1f1e6.svg"></span>العربية</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('hi')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇮🇳" src="/static/imgs/svg/1f1ee-1f1f3.svg"></span>हिन्दी</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('th')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇹🇭" src="/static/imgs/svg/1f1f9-1f1ed.svg"></span>ภาษาไทย</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ko')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇰🇷" src="/static/imgs/svg/1f1f0-1f1f7.svg"></span>한국어</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('ja')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇯🇵" src="/static/imgs/svg/1f1ef-1f1f5.svg"></span>日本語</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('zh-cn')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇨🇳" src="/static/imgs/svg/1f1e8-1f1f3.svg"></span>简体中文</a>
+                  </div>
+                  <div class="col-6">
+                    <a class="dropdown-item" href="https://hytalenames.org/" onclick="setLang('zh-tw')"><span class="mr-1"><img class="emoji" draggable="false" alt="🇹🇼" src="/static/imgs/svg/1f1f9-1f1fc.svg"></span>繁體中文</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="container px-3 pb-3">
+        <form method="GET" action="/search">
+          <div class="input-group input-group-lg">
+            <input style="font-family: 'Consolas', monospace" id="search-box" class="form-control" type="search" name="q" placeholder="Name | UUID" autocomplete="off" spellcheck="false">
+            <div class="input-group-append">
+              <button class="btn btn-primary px-4" type="submit" title="Search"><i class="far fa-search"></i></button>
+            </div>
+          </div>
+        </form>
+        <script>
+          if (!location.hash) {
+            var searchBoxElement = document.getElementById('search-box');
+            searchBoxElement.focus();
+            searchBoxElement.select();
+          }
+        </script>
+      </div>
+    </div>
+  </div>
+</header>

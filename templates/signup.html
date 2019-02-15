@@ -1,0 +1,56 @@
+<main class="container">
+  {% with messages = get_flashed_messages() %}
+  {%for message in messages%}
+  <div class="alert alert-danger text-center">{{message}}</div>
+  {% endfor %}
+  {% endwith %}
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2 class="card-title text-center">Sign Up</h2>
+          <hr>
+          <div class="mb-1">
+            <form method="POST">
+              <fieldset class="form-group">
+                <label for="email"><strong>User Name</strong></label>
+                <input class="form-control" id="username" name="username" autofocus="" required="">
+              </fieldset>
+                <fieldset class="form-group">
+                <label for="email"><strong>Email Address</strong></label>
+                <input class="form-control" id="email" type="email" name="email" autofocus="" required="">
+              </fieldset>
+              <fieldset class="form-group">
+                <label for="email"><strong>Password</strong></label>
+                <input class="form-control" id="passwd" type="password" name="passwd" autofocus="" required="">
+              </fieldset>
+              <fieldset class="form-group">
+                <label for="email"><strong>Confirm Password</strong></label>
+                <input class="form-control" id="confirm" type="password" name="confirm" autofocus="" required="">
+              </fieldset>
+              <fieldset class="form-check mb-3">
+                <input id="privacyConsent" class="form-check-input" type="checkbox" name="privacyConsent" required="">
+                <label class="form-check-label" for="privacyConsent">I consent to HNames processing my email address. <a href="/privacy#3.3">Read more.</a></label>
+              </fieldset>
+              <fieldset class="form-check mb-3">
+                <input id="oldEnough" class="form-check-input" type="checkbox" name="oldEnough" required="">
+                <label class="form-check-label" for="oldEnough">I am 13 years of age or older.</label>
+              </fieldset>
+              <fieldset class="form-check mb-3">
+                <div class="g-recaptcha" data-sitekey="6LcYmJEUAAAAAOcdHyqGqlyeHQ9BCDgm5HV4EY__"></div>
+              </fieldset>
+              <div class="text-center">
+                <button class="btn btn-primary" type="submit" style="min-width:8rem;">Sign Up</button>
+              </div>
+            </form>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col"><a href="/login">Log In</a></div>
+            <div class="col-auto"><a href="/forget-password">Forgot Password?</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
