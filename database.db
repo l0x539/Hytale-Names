@@ -4,7 +4,7 @@ USE hytale_names;
 
 CREATE TABLE names (
     id int NOT NULL AUTO_INCREMENT,
-    uuid VARCHAR(50),
+    uuid VARCHAR(50) DEFAULT "",
     name VARCHAR(200),
     time_created DATETIME,
     searches int DEFAULT 0,

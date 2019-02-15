@@ -54,7 +54,7 @@ def update(syntax):
 def execute(syntax, args):
     conn = mysql.connect()
     cursor = conn.cursor()
-    cursor.execute(syntax, tuple(args))
+    cursor.execute(syntax, tuple(args) if type(args) != tuple else args)
     conn.commit()
     ret = []
     for cur in cursor:
@@ -77,52 +77,37 @@ def get_favorit_names():
 
 # Done.
 def increment_search(search):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE names SET searches = searches + 1 WHERE name=%s", (search))
-    conn.commit()
+    execute("UPDATE names SET searches = searches + 1 WHERE name=%s", (search))
 
 def increment_favorit(name_id):
-    execute("UPDATE names SET favorit = favorit + 1 WHERE name=%s", (name_id))
+    execute("UPDATE names SET favorit = favorit + 1 WHERE name=%s", [name_id])
 
 def decrement_favorit(name_id):
-    execute("UPDATE names SET favorit = favorit - 1 WHERE name=%s", (name_id))
+    execute("UPDATE names SET favorit = favorit - 1 WHERE name=%s", [name_id])
 
 def add_searched_name(search):
-    execute("INSERT INTO names (uuid, name, time_created, searches) VALUES (\"\", %s, NOW(), 1)", (search))
+    execute("INSERT INTO names (name, time_created, searches) VALUES (%s, NOW(), 1)", ([str(search)]))
 
 
 # Done.
 def get_user(HASH, email):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE passwd=%s AND email=%s", (HASH, email))
-    conn.commit()
+    cursor = execute("SELECT * FROM users WHERE passwd=%s AND email=%s", [HASH, email])
     for cur in cursor:
         return list(cur)
     return False
 
 def get_user_recover(hash):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE recover_hash=%s", (hash))
-    conn.commit()
+    cursor = execute("SELECT * FROM users WHERE recover_hash=%s", [hash])
     for cur in cursor:
         return list(cur)
     return False
 
 def register_user(id):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE users SET registred=%s", ("1"))
-    conn.commit()
+    execute("UPDATE users SET registred=%s", ("1"))
 
 # Done.
 def get_email(email):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email=%s", (email))
-    conn.commit()
+    cursor = execute("SELECT * FROM users WHERE email=%s", [email])
     for cur in cursor:
         print(cur)
         return cur[0]
@@ -145,40 +130,28 @@ def hash_passwd(passwd):
     return sha256(bytes(passwd, "utf-8")).hexdigest()
 
 def update_password(Hash, passwd):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE users SET passwd=%s WHERE recover_hash=%s", (passwd, Hash))
-    conn.commit()
+    execute("UPDATE users SET passwd=%s WHERE recover_hash=%s", [passwd, Hash])
 
 def save_recover_hash(Hash, email):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("UPDATE users SET recover_hash=%s WHERE email=%s", (Hash, email))
-    conn.commit()
+    execute("UPDATE users SET recover_hash=%s WHERE email=%s", [Hash, email])
 
 def store_user(user_name, email, passwd):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (username, email, pass_hash, registred, recover_hash) VALUES (%s, %s, %s, %s, %s)", (user_name, email, hash_passwd(passwd), "", "0"))
-    conn.commit()
+    execute("INSERT INTO users (username, email, pass_hash, registred, recover_hash) VALUES (%s, %s, %s, %s, %s)", [user_name, email, hash_passwd(passwd), "", "0"])
 
 def check_registred(id):
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE id=%s", (str(id)))
-    conn.commit()
+    cursor = execute("SELECT * FROM users WHERE id=%s", [str(id)])
     for _ in cursor:
         return True
     return False
 
 
 def check_ip_like(ip, id):
-    cursor = execute("SELECT * FROM likes WHERE user_ip=%s AND name_id=%s", (ip, int(id)))
+    cursor = execute("SELECT * FROM likes WHERE user_ip=%s AND name_id=%s", [ip, int(id)])
     for _ in cursor:
-        execute("DELETE FROM likes WHERE user_ip=%s AND name_id=%s", (ip, int(id)))
+        execute("DELETE FROM likes WHERE user_ip=%s AND name_id=%s", [ip, int(id)])
         increment_favorit(id)
         return True
-    execute("INSERT INTO likes (user_ip, name_id) VALUES (%s, %s)", (ip, int(id)))
+    execute("INSERT INTO likes (user_ip, name_id) VALUES (%s, %s)", [ip, int(id)])
     decrement_favorit(id)
     return False
 
