@@ -2,6 +2,7 @@ from flask import *
 from flask_bootstrap import Bootstrap
 from urllib.request import urlopen
 from flaskext.mysql import MySQL
+from operator import itemgetter
 from hashlib import sha256
 import requests
 import random
@@ -10,7 +11,7 @@ import re
 
 ########## notes ##########
 #                         #
-#      scrap svgs         #
+#      _____ ____         #
 #                         #
 ###########################
 
@@ -22,17 +23,19 @@ def create_app():
 
 
 MAIL_GUN_API_KEY = "YOUR_API_KEY"
-GOOGLE_RECAPTCH_V2_SECRET_KEY = "6LcYmJEUAAAAAEqE395lRoYUTF70WnUSsx7pzllk"
+GOOGLE_RECAPTCH_V2_SECRET_KEY = "GOOGLE CAPTCHA KEY"
 
 app = create_app()
 
+DESCRIPTION = """Check the availability of Hytale Names, Find out if your desired Hytale Name has been claimed, and see who owns specific Hytale Account Names. Hytale Player lookup. """
+KEYWORDS = """hytale, hytale names, hytale name availability, hytale name reservation, hytale beta, hytale release date, hytale game, hytale stats, hytale skins, hytale accounts, hytale lookup, hytale players, hytale download, hytale beta."""
 
 mysql = MySQL()
 app.config['DEBUG'] = True
 app.config['CUSTOM_STATIC_PATH'] = 'templates'
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '984156327'
-app.config['MYSQL_DATABASE_DB'] = 'hytale_names'
+app.config['MYSQL_DATABASE_USER'] = 'USER'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'PASSWD'
+app.config['MYSQL_DATABASE_DB'] = 'DB'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
@@ -65,25 +68,24 @@ def execute(syntax, args):
 # Done.
 def search_name(arg):
     results = []
-    results += (execute("SELECT * FROM names WHERE uuid=%s", [arg]))
     results += (execute("SELECT * FROM names WHERE name=%s", [arg]))
     return list(set(results))
 
 # Done.
 def get_favorit_names():
     results = []
-    results += (execute("SELECT * FROM names ORDER BY favorit", ()))
-    return list(set(results))
+    results += (execute("SELECT * FROM names ORDER BY favorit DESC", ()))
+    return sorted(list(set(results)), key=itemgetter(5))[::-1]
 
 # Done.
 def increment_search(search):
-    execute("UPDATE names SET searches = searches + 1 WHERE name=%s", (search))
+    execute("UPDATE names SET searches = searches + 1 WHERE name=%s", [search])
 
 def increment_favorit(name_id):
-    execute("UPDATE names SET favorit = favorit + 1 WHERE name=%s", [name_id])
+    execute("UPDATE names SET favorit = favorit + 1 WHERE id=%s", [name_id])
 
 def decrement_favorit(name_id):
-    execute("UPDATE names SET favorit = favorit - 1 WHERE name=%s", [name_id])
+    execute("UPDATE names SET favorit = favorit - 1 WHERE id=%s", [name_id])
 
 def add_searched_name(search):
     execute("INSERT INTO names (name, time_created, searches) VALUES (%s, NOW(), 1)", ([str(search)]))
@@ -91,7 +93,7 @@ def add_searched_name(search):
 
 # Done.
 def get_user(HASH, email):
-    cursor = execute("SELECT * FROM users WHERE passwd=%s AND email=%s", [HASH, email])
+    cursor = execute("SELECT * FROM users WHERE pass_hash=%s AND email=%s", [HASH, email])
     for cur in cursor:
         return list(cur)
     return False
@@ -109,7 +111,6 @@ def register_user(id):
 def get_email(email):
     cursor = execute("SELECT * FROM users WHERE email=%s", [email])
     for cur in cursor:
-        print(cur)
         return cur[0]
     return False
 
@@ -139,7 +140,7 @@ def store_user(user_name, email, passwd):
     execute("INSERT INTO users (username, email, pass_hash, registred, recover_hash) VALUES (%s, %s, %s, %s, %s)", [user_name, email, hash_passwd(passwd), "", "0"])
 
 def check_registred(id):
-    cursor = execute("SELECT * FROM users WHERE id=%s", [str(id)])
+    cursor = execute("SELECT * FROM users WHERE id=%s AND registred=\"1\"", [str(id)])
     for _ in cursor:
         return True
     return False
@@ -149,10 +150,10 @@ def check_ip_like(ip, id):
     cursor = execute("SELECT * FROM likes WHERE user_ip=%s AND name_id=%s", [ip, int(id)])
     for _ in cursor:
         execute("DELETE FROM likes WHERE user_ip=%s AND name_id=%s", [ip, int(id)])
-        increment_favorit(id)
+        decrement_favorit(id)
         return True
     execute("INSERT INTO likes (user_ip, name_id) VALUES (%s, %s)", [ip, int(id)])
-    decrement_favorit(id)
+    increment_favorit(id)
     return False
 
 
@@ -174,7 +175,7 @@ def checkRecaptcha(response, secretkey):
 @app.route("/", methods=["GET"])
 def route():
     results = get_favorit_names()
-    return render_template("layout.html", best_names=results, page="main.html", title="Hytale Names", description="Hytale names listing names", keywords="Hytale Names, Hytale, Names, Og Names, best hytale names", logged_in=True if session.get("logged_in") else False)
+    return render_template("layout.html", best_names=results, page="main.html", title="Hytale Names", description=DESCRIPTION, keywords=KEYWORDS, logged_in=True if session.get("logged_in") else False)
 
 # Progress
 @app.route("/search")
@@ -205,8 +206,8 @@ def search():
             flash("too short.")
 
     return render_template("layout.html", best_names=results, page="search.html", title="Hytale Names | Search result",
-                           description="Hytale names listing names",
-                           keywords="Hytale Names, Hytale, Names, Og Names, best hytale names",
+                           description=DESCRIPTION,
+                           keywords=KEYWORDS,
                            logged_in=True if session.get("logged_in") else False)
 
 # Done.
@@ -219,7 +220,7 @@ def login():
             email = request.form.get('email')
             passwd = request.form.get('passwd')
             if (re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email)):
-                user = get_user(sha256(bytes(passwd, "utf-8")).hexdigest(), email)
+                user = get_user(hash_passwd(passwd), email)
                 if user:
                     session['logged_in'] = True
                     session['id'] = user[0]
@@ -227,6 +228,8 @@ def login():
                     session['email'] = user[2]
                     session['username'] = user[1]
                     session['registred'] = user[4]
+
+                    session['recover'] = user[5]
                     return redirect("/")
                 else:
                     flash("Email or password are wrong.")
@@ -236,8 +239,8 @@ def login():
             flash("Something went wrong!")
 
     return render_template("layout.html", page="login.html", title="Hytale Names | Log In",
-                           description="Hytale names listing names",
-                           keywords="Hytale Names, Hytale, Names, Og Names, best hytale names",
+                           description=DESCRIPTION,
+                           keywords=KEYWORDS,
                            logged_in=True if session.get("logged_in") else False)
 
 # Done.
@@ -255,8 +258,7 @@ def signup():
     if session.get("logged_in"):
         return redirect("/")
     if request.method == 'POST':
-        response = request.form.get('g-recaptcha-response')
-        if checkRecaptcha(response, GOOGLE_RECAPTCH_V2_SECRET_KEY):
+        if checkRecaptcha(request.form.get('g-recaptcha-response'), GOOGLE_RECAPTCH_V2_SECRET_KEY):
             USERNAME = request.form.get("username")
             EMAIL = request.form.get("email")
             PASSWD = request.form.get("passwd")
@@ -279,6 +281,8 @@ def signup():
                                         session['logged_in'] = True
                                         session['email'] = EMAIL
                                         session['username'] = USERNAME
+
+                                        session['recover'] = HASH
                                         return redirect("/")
                                     else:
                                         flash("password must contain Uppercase, lowercase, numbers and special characters.")
@@ -297,8 +301,8 @@ def signup():
         else:
             flash("please make sure to check the recaptcha box")
 
-    return render_template("layout.html", page="signup.html", title="Hytale Names | Sign up", description="Hytale names listing names",
-                    keywords="Hytale Names, Hytale, Names, Og Names, best hytale names",
+    return render_template("layout.html", page="signup.html", title="Hytale Names | Sign up", description=DESCRIPTION,
+                    keywords=KEYWORDS,
                     logged_in=True if session.get("logged_in") else False)
 
 
@@ -324,8 +328,8 @@ def forget_pass():
                 flash("Invalid email")
 
     return render_template("layout.html", page="forget-password.html", title="Hytale Names | Recover account",
-                           description="Hytale names listing names",
-                           keywords="Hytale Names, Hytale, Names, Og Names, best hytale names",
+                           description=DESCRIPTION,
+                           keywords=KEYWORDS,
                            logged_in=True if session.get("logged_in") else False)
 
 
@@ -342,7 +346,7 @@ def recover():
         if (len(PASSWD) > 8 and len(PASSWD) < 30):
             if (PASSWD == CONFIRM_PASS):
                 if re.match(r'[A-Za-z0-9@#$%^&+=]{8,}', PASSWD):
-                    update_password(HASH, sha256(bytes(PASSWD, "utf-8")))
+                    update_password(HASH, hash_passwd(PASSWD))
                     session['logged_in'] = True
                     session['registred'] = True
                     return redirect("/profile-updated")
@@ -357,6 +361,7 @@ def recover():
                 session['email'] = user[2]
                 session['username'] = user[1]
                 session['registred'] = user[4]
+                session['recover'] = user[5]
                 return render_template("layout.html", page="creat_password.html", hash=HASH)
 
             else:
@@ -366,8 +371,7 @@ def recover():
 
     return redirect("/")
 
-
-# TODO
+# Done.
 @app.route("/confirm", methods=["GET"])
 def confirm():
     if session.get("logged_in"):
@@ -384,6 +388,7 @@ def confirm():
                 session['id'] = user[0]
                 session['email'] = user[2]
                 session['username'] = user[1]
+                session['recover'] = user[5]
                 return redirect("/")
             else:
                 return "error", 404
@@ -394,16 +399,44 @@ def confirm():
 # TODO
 @app.route("/claim-your-profile")
 def claim():
-    return "Comming Soon"
+    return "Comming Soon..<script>document.ready(window.setTimeout(location.href = \"https://hytalenames.org\",7000));</script>"
 
+
+# Important note here
 @app.route("/profile-updated")
 def profile_updated():
-    if session.get("logged_in"):
+    if not session.get("logged_in"):  # change if session.get("logged_in") to if not session.get("logged_in")
         return redirect("/")
     return render_template("layout.html", page="profile-updated.html", title="Hytale Names | Profile updated",
-                           description="Hytale names listing names",
-                           keywords="Hytale Names, Hytale, Names, Og Names, best hytale names",
+                           description=DESCRIPTION,
+                           keywords=KEYWORDS,
                            logged_in=True if session.get("logged_in") else False)
+
+@app.route("/check-mail")
+def check_mail():
+    if session.get("logged_in"):
+        return redirect("/")
+    flash("An email has been sent, please check your email address.")
+    return redirect("/")
+
+
+@app.route("/hytale-names")
+def hytale_names():
+    results = get_favorit_names()
+
+    page = 1
+    m = (len(results) // 10) + 1
+    if request.args.get("p"):
+        if len(results) > 10:
+            page = int(request.args.get("p") if request.args.get("p").strip().isnumeric() else 1)
+            if page <= m and page > 0:
+                results = results[10*(page-1): page*10]
+            else:
+                page = 1
+
+    return render_template("layout.html", best_names=results, m=m, p=page, page="hytale-names.html", title="Hytale Names | Names List",
+                           description=DESCRIPTION,
+                           keywords=KEYWORDS)
 
 # Done
 @app.route("/discord")
@@ -417,14 +450,28 @@ def like():
             id = request.form.get("id").strip()
             if not check_ip_like(request.remote_addr, id):
                 session['liked'+str(id)] = True
-                return jsonify({"status": "Liked"})
+                return jsonify(success="Liked", id=id)
             else:
                 session['liked' + str(id)] = False
-                return jsonify({"status": "Unliked"})
+                return jsonify(success="Unliked", id=id)
 
 
-    return jsonify({"status": "method not allowed"}), 404
+    return jsonify({"success": "method not allowed"}), 404
+
+@app.route("/send-again", methods=["GET", "POST"])
+def send_again():
+    if request.method == 'POST':
+        if checkRecaptcha(request.form.get('g-recaptcha-response'), GOOGLE_RECAPTCH_V2_SECRET_KEY):
+            if not session['registred'] and session['logged_in']:
+                text = "Thank you for your sign up, here is your link for confirmation:\nhttps://hytalenames.org/confirm?hash={}".format(
+                    session['recover'])
+                send_mail(session['email'], "Recover Password", text)
+                return redirect("/")
+
+    return render_template("layout.html", page="send-again.html", title="Hytale Names | Send again",
+                           description=DESCRIPTION,
+                           keywords=KEYWORDS)
 
 if __name__ == "__main__":
-    app.secret_key = 'nico984156327'
+    app.secret_key = 'SESSION SECRET'
     app.run()

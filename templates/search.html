@@ -20,7 +20,7 @@
             <tr>
               <td class="text-muted text-left" width="1">#{{best_names[best_name_index][2]}}</td>
               <td class="text-muted text-center" width="1">#{{best_names[best_name_index][4]}}</td>
-              <td class="text-muted text-right" width="1"><a href="#" onclick="like_unlike({{best_names[best_name_index][0]}})">{% set liked_id="liked"+best_names[best_name_index][0]|string %}{% if session[liked_id] %}✓{% else %}★{% endif %}{{best_names[best_name_index][5]}}</a></td>
+              <td class="text-muted text-right" width="1"><a href="#" id="{{best_names[best_name_index][0]}}" onclick="like_unlike({{best_names[best_name_index][0]}})">{% set liked_id="liked"+best_names[best_name_index][0]|string %}{% if session[liked_id] %}✓{% else %}★{% endif %}{{best_names[best_name_index][5]}}</a></td>
             </tr>
             {% endfor %}
             </tbody>
@@ -28,7 +28,7 @@
         </div>
         {% if best_names|length > 10 %}
       <div class="text-right mt-2 mb-3">
-        <a class="btn btn-primary btn-sm" href="#">Continue<i class="far fa-arrow-right ml-1"></i></a>
+        <a class="btn btn-primary btn-sm" href="/hytale-names">Continue<i class="far fa-arrow-right ml-1"></i></a>
       </div>
        {% endif %}
     </div>
@@ -47,7 +47,13 @@
             type: "POST",
             data: {id: id},
             success: function(data){
-                data = JSON.parse(data);
+                if (data["success"] == "Liked") {
+                  var likes = parseInt($("#"+id).text().replace("★", "")) + 1
+                  $("#"+id).text("✓" + likes);
+                } else if (data["success"] == "Unliked") {
+                  var likes = parseInt($("#"+id).text().replace("✓", "")) - 1
+                  $("#"+id).text("★" + likes);
+                }
                 //update some fields with the updated data
                 //you can access the data like 'data["driver"]'
             }

@@ -1,0 +1,28 @@
+<main class="container">
+  {% with messages = get_flashed_messages() %}
+  {%for message in messages%}
+  <div class="alert alert-danger text-center">{{message}}</div>
+  {% endfor %}
+  {% endwith %}
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2 class="card-title text-center">Confirm captcha</h2>
+          <hr>
+          <div class="mb-1">
+            <form method="POST">
+              <fieldset class="form-check mb-3">
+                <div class="g-recaptcha" data-sitekey="6LcYmJEUAAAAAOcdHyqGqlyeHQ9BCDgm5HV4EY__"></div>
+              </fieldset>
+              <div class="text-center">
+                <button class="btn btn-primary" type="submit" style="min-width:8rem;">Send</button>
+              </div>
+            </form>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

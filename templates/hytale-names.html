@@ -1,4 +1,27 @@
 <main class="container">
+    <h1>Hytale Names</h1>
+    <hr class="mt-1">
+    <div class="col-lg-7 order-lg-1">
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item {% if p <= 1 %}disabled{% endif %}">
+            <a class="page-link px-3" href="/hytale-names" rel="first" title="First Page"><i class="far fa-angle-double-left"></i></a>
+          </li>
+          <li class="page-item {% if p <= 1 %}disabled{% endif %}">
+            <a class="page-link px-3" href="/hytale-names?p={{p-1}}" rel="prev" title="Previous Page"><i class="far fa-angle-left"></i></a>
+          </li>
+          <li class="page-item active d-none d-sm-block">
+            <span class="page-link">Page {{p}}</span>
+          </li>
+          <li class="page-item {% if p >= m %}disabled{% endif %}">
+            <a class="page-link px-3" href="/hytale-names?p={{p+1}}" rel="next" title="Next Page"><i class="far fa-angle-right"></i></a>
+          </li>
+          <li class="page-item {% if p >= m %}disabled{% endif %}">
+            <a class="page-link px-3" href="/hytale-names?p={{m}}" rel="last" title="Last Page"><i class="far fa-angle-double-right"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   {% with messages = get_flashed_messages() %}
   {%for message in messages%}
   <div class="alert alert-danger text-center">{{message}}</div>
@@ -6,14 +29,14 @@
   {% endwith %}
   <div class="row">
     <div class="col-xl-8">
-      <h2 class="text-center"><a href="#">Trending Hytale Names</a></h2>
+      <h2 class="text-center"><a href="#">{{Name}}</a></h2>
         <div class="card table-responsive">
           <table class="table table-sm mb-0">
             <tbody>
             <tr>
-              <td class="text-muted text-left" width="1"><i class="far fa-user menu-icon"></i>Name</td>
-              <td class="text-muted text-center" width="1"><i class="far fa-search menu-icon"></i>Searches</td>
-              <td class="text-muted text-right" width="1"><i class="far fa-star menu-icon"></i>Favorites</td>
+              <td class="text-muted text-left" width="1"><i class="far fa-user menu-icon"></i><b>Name</b></td>
+              <td class="text-muted text-center" width="1"><i class="far fa-search menu-icon"></i><b>Searches</b></td>
+              <td class="text-muted text-right" width="1"><i class="far fa-star menu-icon"></i><b>Favorites</b></td>
             </tr>
             {% if best_names|length >= 10 %} {% set i=10 %} {% else %} {% set i=best_names|length %} {% endif %}
             {% for best_name_index in range(i) %}
@@ -26,10 +49,11 @@
             </tbody>
           </table>
         </div>
-      <div class="text-right mt-2 mb-3">
-        <a class="btn btn-primary btn-sm" href="/hytale-names">Continue<i class="far fa-arrow-right ml-1"></i></a>
-      </div>
     </div>
+
+
+
+
     <div class="col-xl-4">
       <h2 class="d-none d-lg-block">&nbsp;</h2>
       <div class="card mb-3">
@@ -37,8 +61,6 @@
       </div>
     </div>
   </div>
-
-
 </main>
 <script>
   function like_unlike(id) {
@@ -52,7 +74,7 @@
                   $("#"+id).text("✓" + likes);
                 } else if (data["success"] == "Unliked") {
                   var likes = parseInt($("#"+id).text().replace("✓", "")) - 1
-                  $("#"+id).text("★" +  likes);
+                  $("#"+id).text("★" + likes);
                 }
                 //update some fields with the updated data
                 //you can access the data like 'data["driver"]'

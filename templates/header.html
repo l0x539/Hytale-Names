@@ -6,6 +6,7 @@
           <a class="navbar-brand d-none d-lg-block" href="/" title="Hytale Names &amp; Skins"><img style="outline: 1px solid white" class="align-top" src="/static/favicon-32x32.png" width="30" height="30" alt="Hytale Names"><span class="ml-2" translate="no">Hytale Names</span></a>
           <ul class="navbar-nav mr-auto d-none d-lg-flex">
             <li class="nav-item"><a class="nav-link" href="/hytale-names" alt="Minecraft Names"><i class="far fa-align-justify menu-icon"></i>Names</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://hytaleservers.com"><i class="fas fa-server menu-icon"></i>Servers</a></li>
             <li class="nav-item"><a class="nav-link" href="/#faq" title="Frequently Asked Questions"><i class="fas fa-question-circle menu-icon"></i>FAQ</a></li>
             <li class="nav-item"><a class="nav-link" href="/discord"><i class="fab fa-discord menu-icon"></i>Discord</a></li>
           </ul>
@@ -17,6 +18,8 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/hytale-names" alt="Hytale Names"><i class="far fa-align-justify menu-icon"></i>Names</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="https://hytaleservers.com"><i class="fas fa-server menu-icon"></i>Servers</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/#faq" title="Frequently Asked Questions"><i class="fas fa-question-circle menu-icon"></i>FAQ</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/discord"><i class="fab fa-discord menu-icon"></i>Discord</a>
@@ -25,8 +28,8 @@
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
-                {% if logged_in %}
-              <a class="nav-link dropdown-toggle text-nowrap pl-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span translate="no">{{user_email}}</span></a>
+                {% if session['logged_in'] %}
+              <a class="nav-link dropdown-toggle text-nowrap pl-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span translate="no">{{session['email']}}</span></a>
               <div class="dropdown-menu dropdown-menu-right">
                 <h6 class="dropdown-header">Profile</h6>
                 <div class="dropdown-divider"></div>
@@ -172,7 +175,7 @@
       <div class="container px-3 pb-3">
         <form method="GET" action="/search">
           <div class="input-group input-group-lg">
-            <input style="font-family: 'Consolas', monospace" id="search-box" class="form-control" type="search" name="q" placeholder="Name | UUID" autocomplete="off" spellcheck="false">
+            <input style="font-family: 'Consolas', monospace" id="search-box" class="form-control" type="search" name="q" placeholder="Hytale Name" autocomplete="off" spellcheck="false">
             <div class="input-group-append">
               <button class="btn btn-primary px-4" type="submit" title="Search"><i class="far fa-search"></i></button>
             </div>

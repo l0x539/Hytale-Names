@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="og:site_name" content="HyatleNames">
@@ -45,8 +45,14 @@
 <body>
 {% include "header.html" %}
 <div class="mb-3" style="position: relative">
+
+
 </div>
+{% if not session['registred'] and session['logged_in'] %}
+    <div class="alert alert-danger text-center">We have sent a confirmation email, please make sure to check it, or <a href="/send-again">send again </a></div>
+    {% endif %}
 {% include page %}
 {% include "footer.html" %}
+</main>
 </body>
 </html>
